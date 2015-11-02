@@ -14,6 +14,19 @@ public class Main {
         stmt.execute("UPDATE players SET health = 50 WHERE name = 'Alice'"); //sets the health of a VARCHAR in the table
         stmt.execute("DELETE players WHERE name = 'Bob'"); //deletes information from your table
 
+        //BAD:
+        //String input = "', 0, 0, true); DROP TABLE players; --";
+        //stmt.execute(String.format("INSERT INTO players VALUES('%s', 100, 10, true)", input));
+
+        //GOOD:
+        String input = "Charlie";
+        PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO players VALUES(?, 100, 10, true)");
+        stmt2.setString(1, input);
+        stmt2.execute();
+
+
+
+
         ResultSet results = stmt.executeQuery("SELECT * FROM players");//selects player
         while (results.next()){//loops over player
             String name = results.getString("name");//player info
